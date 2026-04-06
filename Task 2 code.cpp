@@ -20,3 +20,16 @@ void loop()
   Serial.println(temperature);
   delay(100);
 }
+
+float temperatureData[180];
+void collect_temperature_data(){
+    for(int i = 0; i<180; i++){
+        int a = analogRead(pinTempSensor);
+        float R = 1023.0/a-1.0;
+        R = R0*R;
+        float temperature = 1.0/(log(R/R0)/B+1/298.15)-273.15;
+        temperatureData[i] = temperature;
+        delay(1000);
+    }
+
+    }

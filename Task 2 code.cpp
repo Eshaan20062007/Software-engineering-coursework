@@ -4,6 +4,7 @@
 const int B = 4275000; // B value of the thermistor
 const int R0 = 100000; // R0 = 100k
 const int pinTempSensor = A0; // Grove - Temperature Sensor connect to A0
+float temperatureData[180]; // Array to store temperature data for 3 minutes
 
 void setup()
 {
@@ -12,16 +13,10 @@ void setup()
 
 void loop()
 {
-  int a = analogRead(pinTempSensor);
-  float R = 1023.0/a-1.0;
-  R = R0*R;
-  float temperature = 1.0/(log(R/R0)/B+1/298.15)-273.15; // convert to temperature via datasheet
-  Serial.print("temperature = ");
-  Serial.println(temperature);
-  delay(100);
+  collect_temperature_data();
+  print_temperature_data();
 }
 
-float temperatureData[180];
 void collect_temperature_data(){
     for(int i = 0; i<180; i++){
         int a = analogRead(pinTempSensor);
@@ -31,5 +26,15 @@ void collect_temperature_data(){
         temperatureData[i] = temperature;
         delay(1000);
     }
+   }
 
+   //Unit test for collect_temperature_data()
+   //Expect: 180 readings stored in temperatureData array
+   void print_temperature_data(){
+    for(int i = 0; i<180; i++){
+        Serial.print("temperature at second ");
+        Serial.print(i);
+        Serial.print(" = ");
+        Serial.println(temperatureData[i]);
     }
+   }

@@ -53,4 +53,11 @@ void collect_temperature_data(){
       }
       magnitude[k] = sqrt(real[k]*real[k] + imag[k]*imag[k]);
     }
+
+    // Calculate frequency using Eq. 3.2
+    float frequency[180];
+    for (int k = 0; k<180; k++){
+      frequency[k] = (k*magnitude[k])/180;
+    }
+    return frequency;
    }

@@ -43,7 +43,7 @@ void collect_temperature_data(){
     }
    }
 
-   void apply_dft(){
+   float* apply_dft(){
     for (int k = 0; k<180; k++){
       real[k] = 0;
       imag[k] = 0;
@@ -61,3 +61,17 @@ void collect_temperature_data(){
     }
     return frequency;
    }
+
+void send_data_to_pc(){
+  float* frequency = apply_dft();
+  for (int i = 0; i<180; i++){
+    Serial.print("Time: ");
+    Serial.print(i);
+    Serial.print(", Temp: ");
+    Serial.print(temperatureData[i]);
+    Serial.print(", Freq: ");
+    Serial.print(frequencies[i]);
+    Serial.print(", Mag: ");
+    Serial.println(magnitude[i]);
+  }
+}

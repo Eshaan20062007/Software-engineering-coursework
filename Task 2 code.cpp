@@ -50,8 +50,8 @@ void collect_temperature_data(){
 
    float* apply_dft(){
     for (int k = 0; k<amountOfReadings; k++){
-      realVal = 0;
-      imagVal = 0;
+      float realVal = 0;
+      float imagVal = 0;
       for (int n = 0; n<amountOfReadings; n++){
         realVal += temperatureData[n] * cos(2*M_PI*k*n/amountOfReadings);
         imagVal -= temperatureData[n] * sin(2*M_PI*k*n/amountOfReadings);
@@ -68,6 +68,18 @@ void collect_temperature_data(){
    }
 
 void send_data_to_pc(){
+  Serial.print("Current Mode: ");
+    if(currentMode == 0){
+        Serial.println("ACTIVE");
+    }
+    else if(currentMode == 1){
+        Serial.println("IDLE");
+    }
+    else{
+        Serial.println("POWER DOWN");
+    }
+
+  
   float* frequency = apply_dft();
   for (int i = 0; i<amountOfReadings;i++){
     Serial.print("Time: ");

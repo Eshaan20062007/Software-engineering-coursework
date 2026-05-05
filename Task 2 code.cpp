@@ -7,8 +7,6 @@ const int pinTempSensor = A0; // Grove - Temperature Sensor connect to A0
 const int MAX_READINGS = 180;
 float temperatureData[MAX_READINGS]; // Array to store temperature data for 3 minutes
 int samplingDelay = 1000; // 1 second delay for sampling
-float real[MAX_READINGS];
-float imag[MAX_READINGS];
 float magnitude[MAX_READINGS];
 int currentMode = 0; // 0 = ACTIVE, 1 = IDLE, 2 = POWER_DOWN
 float samplingFrequency = 1.0; // 1 sample per second
@@ -52,13 +50,13 @@ void collect_temperature_data(){
 
    float* apply_dft(){
     for (int k = 0; k<amountOfReadings; k++){
-      real[k] = 0;
-      imag[k] = 0;
+      realVal = 0;
+      imagVal = 0;
       for (int n = 0; n<amountOfReadings; n++){
-        real[k] += temperatureData[n] * cos(2*M_PI*k*n/amountOfReadings);
-        imag[k] -= temperatureData[n] * sin(2*M_PI*k*n/amountOfReadings);
+        realVal += temperatureData[n] * cos(2*M_PI*k*n/amountOfReadings);
+        imagVal -= temperatureData[n] * sin(2*M_PI*k*n/amountOfReadings);
       }
-      magnitude[k] = sqrt(real[k]*real[k] + imag[k]*imag[k]);
+      magnitude[k] = sqrt(realVal*realVal + imagVal*imagVal);
     }
 
     // Calculate frequency using Eq. 3.2

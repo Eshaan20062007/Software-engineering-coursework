@@ -13,6 +13,7 @@ float magnitude[MAX_READINGS];
 int currentMode = 0; // 0 = ACTIVE, 1 = IDLE, 2 = POWER_DOWN
 float samplingFrequency = 1.0; // 1 sample per second
 int amountOfReadings = 180;
+float temperatureDifferences[179]; // Array to store temperature differences for 3 minutes
 
 void setup()
 {
@@ -107,4 +108,15 @@ void apply_power_mode(){
         amountOfReadings = 6;
         samplingDelay = 30000;
     }
+}
+
+float calculate_moving_average(){
+  for (int i = 1; i<amountOfReadings; i++){
+    temperatureDifferences[i-1] = temperatureData[i] - temperatureData[i-1];}
+
+    float sum = 0;
+    for (int i = (amountOfReadings-1)-10; i<amountOfReadings-1; i++){
+      sum += temperatureDifferences[i];
+    }
+    return sum/10;
 }

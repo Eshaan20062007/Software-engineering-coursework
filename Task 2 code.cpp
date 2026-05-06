@@ -4,14 +4,20 @@
 const int B = 4275000; // B value of the thermistor
 const int R0 = 100000; // R0 = 100k
 const int pinTempSensor = A0; // Grove - Temperature Sensor connect to A0
-const int MAX_READINGS = 180;
+const int MAX_READINGS = 10;
 float temperatureData[MAX_READINGS]; // Array to store temperature data for 3 minutes
 int samplingDelay = 1000; // 1 second delay for sampling
 float magnitude[MAX_READINGS];
 int currentMode = 0; // 0 = ACTIVE, 1 = IDLE, 2 = POWER_DOWN
 float samplingFrequency = 1.0; // 1 sample per second
-int amountOfReadings = 180;
-float temperatureDifferences[179]; // Array to store temperature differences for 3 minutes
+int amountOfReadings = 10;
+float temperatureDifferences[10]; // Array to store temperature differences for 3 minutes
+
+//Optimized memory usage:
+//temperatureData[10] = 40 bytes
+//magnitude[10] = 40 bytes
+//temperatureDifferences[10] = 40 bytes
+//Total memory usage = 120 bytes - which is under the RAM limit of the Arduino Uno (2048 bytes)
 
 void setup()
 {
@@ -38,7 +44,7 @@ void collect_temperature_data(){
    }
 
    //Unit test for collect_temperature_data()
-   //Expect: 180 readings stored in temperatureData array
+   //Expect: 10 readings stored in temperatureData array
    void print_temperature_data(){
     for(int i = 0; i<amountOfReadings; i++){
         Serial.print("temperature at second ");
@@ -107,16 +113,19 @@ int decide_power_mode(float averageFrequency){
 
 void apply_power_mode(){
     if(currentMode == 0){ // ACTIVE
-        amountOfReadings = 180; // set number of readings
+        amountOfReadings = 10; // set number of readings
         samplingDelay = 1000; // set delay
+        samplingFrequency = 1.0; // set sampling frequency
     }
     else if(currentMode == 1){ // IDLE
         amountOfReadings = 36;
         samplingDelay = 5000;
+        samplingFrequency = 0.2;
     }
     else{ // POWER_DOWN
         amountOfReadings = 6;
         samplingDelay = 30000;
+        samplingFrequency = 0.033;
     }
 }
 

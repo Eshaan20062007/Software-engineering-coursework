@@ -27,9 +27,10 @@ void setup()
 void loop()
 {
   collect_temperature_data();
-  send_data_to_pc();
-  currentMode = decide_power_mode(samplingFrequency);
+  float avgVariation = calculate_moving_average();
+  currentMode = decide_power_mode(avgVariation);
   apply_power_mode();
+  send_data_to_pc();
 } 
 
 void collect_temperature_data(){
@@ -97,6 +98,9 @@ void send_data_to_pc(){
     Serial.print(", Mag: ");
     Serial.println(magnitude[i]);
   }
+  Serial.print("Sampling Delay: ");
+  Serial.print(samplingDelay);
+  Serial.println("ms");
 }
 
 int decide_power_mode(float averageFrequency){
@@ -118,12 +122,12 @@ void apply_power_mode(){
         samplingFrequency = 1.0; // set sampling frequency
     }
     else if(currentMode == 1){ // IDLE
-        amountOfReadings = 36;
+        amountOfReadings = 7;
         samplingDelay = 5000;
         samplingFrequency = 0.2;
     }
     else{ // POWER_DOWN
-        amountOfReadings = 6;
+        amountOfReadings = 4;
         samplingDelay = 30000;
         samplingFrequency = 0.033;
     }
@@ -134,7 +138,7 @@ float calculate_moving_average(){
     temperatureDifferences[i-1] = temperatureData[i] - temperatureData[i-1];}
 
     float sum = 0;
-    for (int i = (amountOfReadings-1)-10; i<amountOfReadings-1; i++){
+    for (int i = 0; i < amountOfReadings - 1; i++){
       sum += temperatureDifferences[i];
     }
     return sum/10;

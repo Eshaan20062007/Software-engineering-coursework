@@ -173,12 +173,12 @@ def run_optimised():
     es = ecofactory(robots=3, droids=3, drones=3, chargers=OPT_CHARGERS, pizzas=9) # create the ecosystem with 3 of each bot type, 4 chargers and 9 pizzas
 
     es._max_weight = OPT_MAX_WEIGHT # Allow heavier pizzas than the baseline
-
+   
     chargers = es.chargers() # get the chargers so we can check which charger is closest to the bot
 
     es.display(show=SHOW, pause=PAUSE)
     es.messages_on = False
-    es.duration = DURATION 
+    es.duration = 24
 
     while es.active:
         for bot in es.bots():
@@ -208,3 +208,16 @@ def run_optimised():
         es.update()
 
     return es
+
+if __name__ == "__main__":
+
+    # Run with visuals on so you can watch the optimised bots in the arena
+    SHOW = 1
+    PAUSE = 200
+
+    es = run_optimised()
+
+    kpis = collect_kpis(es)
+    print("\nOptimised KPIs after 1 week:")
+    for key, value in kpis.items():
+        print(f"  {key}: {value}")

@@ -137,7 +137,7 @@ def run_baseline(): # Function to run the baseline simulation with simple rules 
 
     es.display(show=SHOW, pause=PAUSE)
     es.messages_on = False
-    es.duration = DURATION
+    es.duration = 24
 
     while es.active:
         for bot in es.bots():
@@ -211,10 +211,6 @@ def run_optimised():
 
 
 def print_kpi_comparison(baseline, optimised):
-    """
-    Print a simple table comparing the baseline and optimised KPIs.
-    """
-
     print("\nKPI Comparison:")
     print(f"{'KPI':<20} {'Baseline':>10} {'Optimised':>10}")
 
@@ -223,13 +219,17 @@ def print_kpi_comparison(baseline, optimised):
 
 if __name__ == "__main__":
 
-    # Run with visuals on so you can watch the optimised bots in the arena
+    # Run visually for 1 day so you can watch before seeing the comparison
     SHOW = 1
     PAUSE = 200
 
-    es = run_optimised()
+    # Run baseline first
+    es_baseline = run_baseline()
+    baseline_kpis = collect_kpis(es_baseline)
 
-    kpis = collect_kpis(es)
-    print("\nOptimised KPIs after 1 week:")
-    for key, value in kpis.items():
-        print(f"  {key}: {value}")
+    # Then run optimised
+    es_optimised = run_optimised()
+    optimised_kpis = collect_kpis(es_optimised)
+
+    # Print the comparison table
+    print_kpi_comparison(baseline_kpis, optimised_kpis)

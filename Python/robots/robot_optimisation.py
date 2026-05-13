@@ -111,7 +111,7 @@ def collect_kpis(es):
     total_energy = 0
     total_distance = 0
 
-    for bot in es.bots:
+    for bot in es.bots():
         total_units += bot.units_delivered
         total_weight += bot.weight_delivered
         total_energy += bot.energy
@@ -125,3 +125,37 @@ def collect_kpis(es):
     }
 
     return fleet
+
+if __name__ == "__main__":
+
+    print("Creating ecosystem...")
+
+    # Create a small ecosystem with 3 bots and 3 pizzas so there is enough to watch
+    es = ecofactory(robots=1, droids=1, drones=1, chargers=[40, 20], pizzas=3)
+    es.messages_on = False
+
+    # show=1 means the arena updates every hour so you can watch the bots move
+    # pause=200 slows it down enough to actually see what is happening
+    es.display(show=1, pause=200)
+
+    # Run for 24 hours (1 day) so you can watch a few deliveries happen
+    es.duration = 24
+    charger = es.chargers()[0]
+
+    while es.active:
+        for bot in es.bots():
+            if bot.soc / bot.max_soc < 0.20 and bot.station is None:
+                bot.charge(charger)
+            if bot.activity == 'idle':
+                for pizza in es.deliverables(status='ready'):
+                    bot.deliver(pizza)
+                    break
+            if bot.target_destination:
+                bot.move()
+        es.update()
+
+    # Print the KPIs once the run finishes
+    kpis = collect_kpis(es)
+    print("\nKPIs after 24 hours:")
+    for key, value in kpis.items():
+        print(f"  {key}: {value}")

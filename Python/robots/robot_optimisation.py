@@ -102,3 +102,26 @@ def opportunistic_charger(bot, chargers):
     
     # No charger was close enough so carry on as normal
     return None
+
+def collect_kpis(es):
+    # Collect the performance data of every bot in the ecosystem and return as a dictionary
+
+    total_units = 0
+    total_weight = 0
+    total_energy = 0
+    total_distance = 0
+
+    for bot in es.bots:
+        total_units += bot.units_delivered
+        total_weight += bot.weight_delivered
+        total_energy += bot.energy
+        total_distance += bot.distance
+    
+    fleet = {
+        'units':     total_units,
+        'weight_kg': total_weight,
+        'distance':  round(total_distance, 1),
+        'energy':    round(total_energy,   1),
+    }
+
+    return fleet

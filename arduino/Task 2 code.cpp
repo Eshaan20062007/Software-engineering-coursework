@@ -4,13 +4,13 @@
 const int B = 4275000; // B value of the thermistor
 const int R0 = 100000; // R0 = 100k
 const int pinTempSensor = A0; // Grove - Temperature Sensor connect to A0
-const int MAX_READINGS = 10;
+const int MAX_READINGS = 180; // 3 minutes of readings at 1 sample per second
 float temperatureData[MAX_READINGS]; // Array to store temperature data for 3 minutes
 int samplingDelay = 1000; // 1 second delay for sampling
-float magnitude[MAX_READINGS];
+float magnitude[10]; // Array to store magnitude of DFT for 10 frequencies
 int currentMode = 0; // 0 = ACTIVE, 1 = IDLE, 2 = POWER_DOWN
 float samplingFrequency = 1.0; // 1 sample per second
-int amountOfReadings = 10;
+int amountOfReadings = 180;
 float temperatureDifferences[10]; // Array to store temperature differences for 3 minutes
 
 //Optimized memory usage:

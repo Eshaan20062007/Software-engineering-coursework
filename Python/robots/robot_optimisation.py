@@ -126,36 +126,40 @@ def collect_kpis(es):
 
     return fleet
 
-if __name__ == "__main__":
+def run_baseline(): # Function to run the baseline simulation with simple rules and one charger in the middle
+    print("Running baseline simulation...")
+    plt.close('all')
 
-    print("Creating ecosystem...")
+    es = ecofactory(robots=3, droids=3, drones=3, chargers=[40, 20], pizzas=9) # create the ecosystem with 3 of each bot
+    #type, one charger and 9 pizzas
 
-    # Create a small ecosystem with 3 bots and 3 pizzas so there is enough to watch
-    es = ecofactory(robots=1, droids=1, drones=1, chargers=[40, 20], pizzas=3)
+    charger = es.chargers()[0] # get the one charger from the ecosystem
+
+    es.display(show=SHOW, pause=PAUSE)
     es.messages_on = False
-
-    # show=1 means the arena updates every hour so you can watch the bots move
-    # pause=200 slows it down enough to actually see what is happening
-    es.display(show=1, pause=200)
-
-    # Run for 24 hours (1 day) so you can watch a few deliveries happen
-    es.duration = 24
-    charger = es.chargers()[0]
+    es.duration = DURATION
 
     while es.active:
         for bot in es.bots():
+
+            # If the battery is below 20% send the bot to charge
             if bot.soc / bot.max_soc < 0.20 and bot.station is None:
                 bot.charge(charger)
+
+            # If the bot is idle give it the first available pizza
             if bot.activity == 'idle':
                 for pizza in es.deliverables(status='ready'):
                     bot.deliver(pizza)
                     break
+
+                # If no pizza was found go back home
+                if not bot.destination:
+                    bot.target_destination = HOME
+
+            # Keep moving towards the destination
             if bot.target_destination:
                 bot.move()
+
         es.update()
 
-    # Print the KPIs once the run finishes
-    kpis = collect_kpis(es)
-    print("\nKPIs after 24 hours:")
-    for key, value in kpis.items():
-        print(f"  {key}: {value}")
+    return es

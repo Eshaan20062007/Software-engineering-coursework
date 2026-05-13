@@ -164,11 +164,47 @@ def run_baseline(): # Function to run the baseline simulation with simple rules 
 
     return es
 
-if __name__ == "__main__":
+# This function runs the optimised simulation with smarter rules and more chargers
+def run_optimised():
 
-    es = run_baseline()
+    print("Running optimised simulation...")
+    plt.close('all')
 
-    kpis = collect_kpis(es)
-    print("\nBaseline KPIs after 1 week:")
-    for key, value in kpis.items():
-        print(f"  {key}: {value}")
+    es = ecofactory(robots=3, droids=3, drones=3, chargers=OPT_CHARGERS, pizzas=9) # create the ecosystem with 3 of each bot type, 4 chargers and 9 pizzas
+
+    es._max_weight = OPT_MAX_WEIGHT # Allow heavier pizzas than the baseline
+
+    chargers = es.chargers() # get the chargers so we can check which charger is closest to the bot
+
+    es.display(show=SHOW, pause=PAUSE)
+    es.messages_on = False
+    es.duration = DURATION 
+
+    while es.active:
+        for bot in es.bots():
+
+            threshold = OPT_THRESHOLDS[bot.kind] # Get the charge threshold for this specific bot type
+
+            # Check if there is a charger nearby to stop at opportunistically
+            opp = opportunistic_charger(bot, chargers)
+            if opp:
+                bot.charge(opp)
+
+            # If battery is below the threshold send the bot to the nearest charger
+            elif bot.soc / bot.max_soc < threshold and bot.station is None:
+                bot.charge(nearest_charger(bot, chargers))
+
+            # If the bot is idle find the nearest pizza it can carry
+            if bot.activity == 'idle':
+                ready_pizzas = [p for p in es.deliverables(status='ready') if p.weight <= bot.max_payload]
+                pizza = nearest_pizza(bot, ready_pizzas)
+                if pizza:
+                    bot.deliver(pizza)
+
+            # Keep moving towards the destination
+            if bot.target_destination:
+                bot.move()
+
+        es.update()
+
+    return es

@@ -71,3 +71,16 @@ def nearest_charger(bot, chargers):
             closest_charger = charger
     
     return closest_charger
+
+def nearest_pizza(bot, pizzas):
+    closest_pizza = None
+    closest_distance = float('inf')  # start with infinity so any real distance will be smaller
+    
+    # Loop through every pizza and keep track of whichever one is closest
+    for pizza in pizzas:
+        d = distance(bot.coordinates, pizza.coordinates)
+        if d < closest_distance:
+            closest_distance = d
+            closest_pizza = pizza
+    
+    return closest_pizza

@@ -209,6 +209,18 @@ def run_optimised():
 
     return es
 
+
+def print_kpi_comparison(baseline, optimised):
+    """
+    Print a simple table comparing the baseline and optimised KPIs.
+    """
+
+    print("\nKPI Comparison:")
+    print(f"{'KPI':<20} {'Baseline':>10} {'Optimised':>10}")
+
+    for key in baseline:
+        print(f"{key:<20} {str(baseline[key]):>10} {str(optimised[key]):>10}")
+
 if __name__ == "__main__":
 
     # Run with visuals on so you can watch the optimised bots in the arena

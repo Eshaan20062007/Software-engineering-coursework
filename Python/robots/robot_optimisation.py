@@ -27,7 +27,7 @@ DURATION = "1 week" # how long the simulation will run for
 
 SHOW = 0 # whether to show the arena on screen (0 = no, 1 = yes)
 
-PAUSE = 10 # how long to pause for after each update (in milliseconds)
+PAUSE = 200 # how long to pause for after each update (in milliseconds)
 
 # How many of each bot type to create
 N_ROBOTS = 3
@@ -137,7 +137,7 @@ def run_baseline(): # Function to run the baseline simulation with simple rules 
 
     es.display(show=SHOW, pause=PAUSE)
     es.messages_on = False
-    es.duration = 24
+    es.duration = DURATION
 
     while es.active:
         for bot in es.bots():
@@ -178,7 +178,7 @@ def run_optimised():
 
     es.display(show=SHOW, pause=PAUSE)
     es.messages_on = False
-    es.duration = 24
+    es.duration = DURATION
 
     while es.active:
         for bot in es.bots():

@@ -163,3 +163,12 @@ def run_baseline(): # Function to run the baseline simulation with simple rules 
         es.update()
 
     return es
+
+if __name__ == "__main__":
+
+    es = run_baseline()
+
+    kpis = collect_kpis(es)
+    print("\nBaseline KPIs after 1 week:")
+    for key, value in kpis.items():
+        print(f"  {key}: {value}")

@@ -58,3 +58,16 @@ OPT_THRESHOLDS = {
 OPPORT_SOC = 0.60 # If a bot's battery is below 60% and there's a charger nearby, it will hopefully go to a charger
 
 OPPORT_DIST = 8.0 # If a bot is within 8 units of a charger, it will charge their battery hopefully
+
+def nearest_charger(bot, chargers):
+    closest_charger = None
+    closest_distance = float('inf')  # start with infinity so any real distance will be smaller
+    
+    # Loop through every charger and keep track of whichever one is closest
+    for charger in chargers:
+        d = distance(bot.coordinates, charger.coordinates)
+        if d < closest_distance:
+            closest_distance = d
+            closest_charger = charger
+    
+    return closest_charger

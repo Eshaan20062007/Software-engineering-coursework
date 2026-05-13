@@ -27,7 +27,7 @@ DURATION = "1 week" # how long the simulation will run for
 
 SHOW = 0 # whether to show the arena on screen (0 = no, 1 = yes)
 
-PAUSE = 200 # how long to pause for after each update (in milliseconds)
+PAUSE = 10 # how long to pause for after each update (in milliseconds)
 
 # How many of each bot type to create
 N_ROBOTS = 3
@@ -219,9 +219,7 @@ def print_kpi_comparison(baseline, optimised):
 
 if __name__ == "__main__":
 
-    # Run visually for 1 day so you can watch before seeing the comparison
-    SHOW = 1
-    PAUSE = 200
+# Run both simulations and collect their KPIs for comparison
 
     # Run baseline first
     es_baseline = run_baseline()

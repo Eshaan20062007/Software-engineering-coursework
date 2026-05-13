@@ -84,3 +84,21 @@ def nearest_pizza(bot, pizzas):
             closest_pizza = pizza
     
     return closest_pizza
+
+# This function implements the opportunistic charging behaviour for bots
+def opportunistic_charger(bot, chargers):
+    # Do not interrupt a bot that is already heading to a station
+    if bot.station is not None:
+        return None
+    
+    # Only charge opportunistically if the battery is below the threshold
+    if bot.soc / bot.max_soc >= OPPORT_SOC:
+        return None
+    
+    # Check each charger to see if any are close enough to divert to
+    for charger in chargers:
+        if distance(bot.coordinates, charger.coordinates) <= OPPORT_DIST:
+            return charger
+    
+    # No charger was close enough so carry on as normal
+    return None

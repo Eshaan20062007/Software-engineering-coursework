@@ -2,6 +2,7 @@
 # Task 4 - Temperature Data Analysis and Visualisation
 
 import matplotlib.pyplot as plt
+import math
 
 # Load the data form the CSV file
 # Create empty lists to store the data
@@ -32,5 +33,27 @@ plt.plot(time_values, temperature_values)
 plt.title('Temperature vs Time')
 plt.xlabel('Time (seconds)')
 plt.ylabel('Temperature (C)')
+plt.grid(True)
+plt.show()
+
+# Calculate the DFT manually the same way as the Arduino code
+n = len(temperature_values)
+magnitude = []
+frequency = []
+
+for k in range(n):
+    real = 0
+    imag = 0
+    for i in range(n):
+        real += temperature_values[i] * math.cos(2 * math.pi * k * i / n)
+        imag -= temperature_values[i] * math.sin(2 * math.pi * k * i / n)
+    magnitude.append(math.sqrt(real**2 + imag**2))
+    frequency.append(k / n)  # frequency in Hz
+
+plt.figure()
+plt.plot(frequency, magnitude)
+plt.title('Magnitude vs Frequency')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Magnitude')
 plt.grid(True)
 plt.show()

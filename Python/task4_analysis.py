@@ -78,3 +78,12 @@ plt.ylabel('Temperature (C)')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+# Plot the histogram of temperature values
+plt.figure()
+plt.hist(temperature_values, bins=10)
+plt.title('Histogram of Temperature Readings')
+plt.xlabel('Temperature (C)')
+plt.ylabel('Number of Readings')
+plt.grid(True)
+plt.show()

@@ -87,3 +87,22 @@ plt.xlabel('Temperature (C)')
 plt.ylabel('Number of Readings')
 plt.grid(True)
 plt.show()
+
+# Plot temperature change rate vs time
+
+# Calculate the difference between each consecutive temperature reading
+change_rate = []
+change_time = []
+
+for i in range(1, len(temperature_values)):
+    change = temperature_values[i] - temperature_values[i-1]
+    change_rate.append(change)
+    change_time.append(time_values[i])
+
+plt.figure()
+plt.plot(change_time, change_rate)
+plt.title('Temperature Change Rate vs Time')
+plt.xlabel('Time (seconds)')
+plt.ylabel('Temperature Change (C per second)')
+plt.grid(True)
+plt.show()

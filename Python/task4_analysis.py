@@ -57,3 +57,24 @@ plt.xlabel('Frequency (Hz)')
 plt.ylabel('Magnitude')
 plt.grid(True)
 plt.show()
+
+# Calculate a moving average with a window of 10 readings
+window = 10
+smoothed = []
+
+for i in range(len(temperature_values)):
+    # For the first few readings use whatever readings are available
+    start = max(0, i - window)
+    average = sum(temperature_values[start:i+1]) / len(temperature_values[start:i+1])
+    smoothed.append(average)
+
+# Plot both the original and smoothed temperature on the same graph
+plt.figure()
+plt.plot(time_values, temperature_values, label='Original')
+plt.plot(time_values, smoothed, label='Smoothed')
+plt.title('Smoothed Temperature vs Time')
+plt.xlabel('Time (seconds)')
+plt.ylabel('Temperature (C)')
+plt.legend()
+plt.grid(True)
+plt.show()

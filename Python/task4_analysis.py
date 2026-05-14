@@ -29,7 +29,7 @@ print(f"Loaded {len(time_values)} readings")
 
 # plot temperature vs time
 plt.figure()
-plt.plot(time_values, temperature_values)
+plt.plot(time_values, temperature_values, marker = '.')
 plt.title('Temperature vs Time')
 plt.xlabel('Time (seconds)')
 plt.ylabel('Temperature (C)')
@@ -70,10 +70,9 @@ for i in range(len(temperature_values)):
 
 # Plot both the original and smoothed temperature on the same graph
 plt.figure()
-plt.plot(time_values, temperature_values, label='Original')
+plt.plot(time_values, temperature_values, marker='.', label='Original')
 plt.plot(time_values, smoothed, label='Smoothed')
 plt.title('Smoothed Temperature vs Time')
-plt.xlabel('Time (seconds)')
 plt.ylabel('Temperature (C)')
 plt.legend()
 plt.grid(True)
@@ -100,7 +99,7 @@ for i in range(1, len(temperature_values)):
     change_time.append(time_values[i])
 
 plt.figure()
-plt.plot(change_time, change_rate)
+plt.plot(change_time, change_rate, marker='.')
 plt.title('Temperature Change Rate vs Time')
 plt.xlabel('Time (seconds)')
 plt.ylabel('Temperature Change (C per second)')

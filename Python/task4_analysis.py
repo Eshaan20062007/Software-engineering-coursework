@@ -25,3 +25,12 @@ with open(r'C:\Users\evfir\OneDrive - Loughborough University\Visual studio code
         temperature_values.append(temperature)
 
 print(f"Loaded {len(time_values)} readings")
+
+# plot temperature vs time
+plt.figure()
+plt.plot(time_values, temperature_values)
+plt.title('Temperature vs Time')
+plt.xlabel('Time (seconds)')
+plt.ylabel('Temperature (C)')
+plt.grid(True)
+plt.show()
